@@ -1,0 +1,81 @@
+//min max refers that the question is of binary search //
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define mod 1000000007
+const int N = 2e5 + 5;
+#define ff first
+#define ss second
+#define fr(i,n) for(ll i = 0; i<n; i++)
+#define pb push_back
+#define PI 3.141592653589793238462
+#define set_bits __builtin_popcount
+#define all(s) sort(s.begin(), s.end())
+#define runf ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+int prime[32005];
+
+void build(ll ind, ll low, ll high, ll arr[], ll seg[]){
+   if(low==high){
+      seg[ind]=arr[low];
+      return;
+   }
+   ll mid=(low+high)/2;
+   build(2*ind+1, low, mid, arr, seg);
+   build(2*ind+2, mid+1, high, arr, seg);
+   seg[ind]=(seg[2*ind+1]+seg[2*ind+2]);
+}
+ll query(ll ind, ll low, ll high, ll l, ll r, ll seg[]){
+   //no overlapping
+   //l r low high or low high l r
+   if(r<low || high<l) return 0;
+
+   //complete overlap
+   //[l low, high r]
+   if(low>=l && high<=r) return seg[ind];
+
+   ll mid=(low+high)/2;
+   ll left=query(2*ind+1, low, mid, l, r, seg);
+   ll right=query(2*ind+2, mid+1, high, l, r, seg);
+   return left+right;
+}
+void update(ll ind, ll low, ll high, ll i, ll val, ll seg[]){
+   if(low==high){
+      seg[ind]=val;
+      return;
+   }
+
+   ll mid=(low+high)/2;
+   if(i<=mid) update(2*ind+1, low, mid, i, val, seg);
+   else update(2*ind+2, mid+1, high, i, val, seg);
+   seg[ind]=(seg[2*ind+1]+seg[2*ind+2]);
+}
+int main() { 
+     runf
+     ll n,q;
+     cin>>n>>q;
+     ll arr[n];
+     for(ll i=0; i<n; i++){
+        cin>>arr[i];
+     }
+     ll seg[4*n];
+     build(0, 0, n-1, arr, seg);
+     while(q--){
+        int type;
+        cin>>type;
+        if(type==1){
+           ll i, val;
+           cin>>i>>val;
+           i--;
+           update(0, 0, n-1, i, val, seg);
+           arr[i]=val;
+        }
+        else{
+           ll l, r;
+           cin>>l>>r;
+           l--,r--;
+           cout<<query(0, 0, n-1, l, r, seg)<<endl;
+        }
+     }
+     return 0;
+}
