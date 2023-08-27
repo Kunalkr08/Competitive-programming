@@ -1,0 +1,84 @@
+//min max refers that the question is of binary search //
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define mod 1000000007
+const int N = 2e5 + 5;
+#define ff first
+#define ss second
+#define fr(i,n) for(ll i = 0; i<n; i++)
+#define pb push_back
+#define PI 3.141592653589793238462
+#define set_bits __builtin_popcount
+#define all(s) sort(s.begin(), s.end())
+#define runf ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+int prime[32005];
+
+// segment tree
+void build(int ind, int low, int high, int seg[], int arr[]){
+     if(low==high){
+        seg[ind]=arr[low];
+        return;
+     }
+
+     int mid=(low+high)/2;
+     build(2*ind+1, low, mid, seg, arr);
+     build(2*ind+2, mid+1, high, seg, arr);
+     seg[ind]=min(seg[2*ind+1], seg[2*ind+2]);
+}
+
+int query(int ind, int low, int high, int l, int r, int seg[]){
+   //no overlapping
+   //l r low high or low high l r
+   if(r<low || high<l) return INT_MAX;
+
+   //complete overlap
+   //[l low, high r]
+   if(low>=l && high<=r) return seg[ind];
+
+   int mid=(low+high)/2;
+   int left=query(2*ind+1, low, mid, l, r, seg);
+   int right=query(2*ind+2, mid+1, high, l, r, seg);
+   return min(left, right);
+}
+
+void update(int ind, int low, int high, int i, int val, int seg[]){
+   if(low==high){
+      seg[ind]=val;
+      return;
+   }
+
+   int mid=(low+high)/2;
+   if(i<=mid) update(2*ind+1, low, mid, i, val, seg);
+   else update(2*ind+2, mid+1, high, i, val, seg);
+   seg[ind]=min(seg[2*ind+1], seg[2*ind+2]);
+}
+int main() { 
+     runf
+     int n,q;
+     cin>>n>>q;
+     int arr[n];
+     for(int i=0; i<n; i++){
+        cin>>arr[i];
+     }
+     int seg[4*n];
+     build(0, 0, n-1, seg, arr);
+     //cout<<seg[0]<<endl;
+     while(q--){
+       int type;
+       cin>>type;
+       if(type==2){
+         int l,r;
+         cin>>l>>r;
+         cout<<query(0,0,n-1,l-1,r-1,seg)<<endl;
+       }
+       else{
+         int i,val;
+         cin>>i>>val;
+         update(0,0,n-1,i-1,val,seg);
+         arr[i]=val;
+       }
+     }
+     return 0;
+}
