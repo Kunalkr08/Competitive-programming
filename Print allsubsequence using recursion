@@ -1,0 +1,41 @@
+//min max refers that the question is of binary search //
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define mod 1000000007
+const int N = 2e5 + 5;
+#define ff first
+#define ss second
+#define fr(i,n) for(ll i = 0; i<n; i++)
+#define pb push_back
+#define PI 3.141592653589793238462
+#define set_bits __builtin_popcount
+#define all(s) sort(s.begin(), s.end())
+#define runf ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+int prime[32005];
+void allsubsequence(ll i, vector<ll>&ds, ll a[], ll n){
+     if(i==n){
+        for(auto it: ds){
+           cout<<it<<" ";
+        }
+        cout<<endl;
+        return;
+     } 
+     ds.push_back(a[i]);
+     allsubsequence(i+1, ds, a, n);
+     ds.pop_back();
+     allsubsequence(i+1, ds, a, n);
+}
+int main() { 
+     runf
+     ll n;
+     cin>>n;
+     ll a[n];
+     for(ll i=0; i<n; i++){
+         cin>>a[i];
+     }
+     vector<ll>ds;
+     allsubsequence(0, ds, a, n);
+     return 0;
+}
