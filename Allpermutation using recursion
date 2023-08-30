@@ -1,0 +1,54 @@
+//min max refers that the question is of binary search //
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define mod 1000000007
+const int N = 2e5 + 5;
+#define ff first
+#define ss second
+#define fr(i,n) for(ll i = 0; i<n; i++)
+#define pb push_back
+#define PI 3.141592653589793238462
+#define set_bits __builtin_popcount
+#define all(s) sort(s.begin(), s.end())
+#define runf ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+int prime[32005];
+ll f=0;
+void allpermutation(vector<int>&ds, vector<int>&nums, vector<vector<int>>&ans, int freq[]){
+     if(ds.size()==nums.size()){
+         ans.push_back(ds);
+         return;
+     }
+     for(int i=0; i<nums.size(); i++){
+        if(!freq[i]){
+           ds.push_back(nums[i]);
+           freq[i]=1;
+           allpermutation(ds, nums, ans, freq);
+           freq[i]=0;
+           ds.pop_back();
+        }
+     }
+}
+int main() { 
+     runf
+     int n;
+     cin>>n;
+     vector<int>nums;
+     int freq[n]={0};
+     for(int i=0; i<n; i++){
+        int x;
+        cin>>x;
+        nums.push_back(x);
+     }
+     vector<vector<int>>ans;
+     vector<int>ds;
+     allpermutation(ds, nums, ans, freq);
+     for(int i=0; i<ans.size(); i++){
+        for(int j=0; j<ans[i].size(); j++){
+           cout<<ans[i][j]<<" ";
+        }
+        cout<<endl;
+     }
+     return 0;
+}
