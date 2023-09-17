@@ -1,0 +1,54 @@
+// //min max refers that the question is of binary search //
+// //Something before something means we use toposort//
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define mod 1000000007
+const int N = 2e5 + 5;
+#define ff first
+#define ss second
+#define fr(i,n) for(ll i = 0; i<n; i++)
+#define pb push_back
+#define PI 3.141592653589793238462
+#define set_bits __builtin_popcount
+#define all(s) sort(s.begin(), s.end())
+#define runf ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+int prime[32005];
+bool check(ll x, ll y, ll n){
+     if(x>=0 && x<n && y>=0 && y<n){
+        return true;
+     }
+     return false;
+}
+ll movei=0;
+void f(ll x, ll y, vector<vector<ll>>&v, vector<vector<ll>>&vis){
+     ll n=v.size();
+     vis[x][y]=1;
+     v[x][y]=movei;
+     ll a[8]={-2,-1,1,2,2,1,-1,-2};
+     ll b[8]={1,2,2,1,-1,-2,-2,-1};
+     for(ll i=0; i<8; i++){
+         ll nx=x+a[i];
+         ll ny=y+b[i];
+         if(check(nx,ny,n) && vis[nx][ny]==-1){
+            movei+=1;
+            f(nx,ny, v, vis);
+         }
+     }
+}
+int main() { 
+     runf
+     ll n;
+     cin>>n;
+     vector<vector<ll>>v(n, vector<ll>(n));
+     vector<vector<ll>>vis(n, vector<ll>(n,-1));
+     f(0,0,v,vis);
+     for(ll i=0; i<n; i++){
+        for(ll j=0; j<n; j++){
+           cout<<v[i][j]<<" ";
+        }
+        cout<<endl;
+     }
+     return 0;
+}
