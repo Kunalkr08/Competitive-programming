@@ -15,19 +15,23 @@ const int N = 2e5 + 5;
 #define runf ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 int prime[32005];
 ll f=0;
-void allpermutation(vector<int>&ds, vector<int>&nums, vector<vector<int>>&ans, int freq[]){
-     if(ds.size()==nums.size()){
-         ans.push_back(ds);
+void allpermutation(map<ll,ll>&m, vector<ll>&a, vector<vector<ll>>&ans, vector<ll>&temp){
+     if(a.size()==temp.size()){
+         ans.pb(temp);
          return;
      }
-     for(int i=0; i<nums.size(); i++){
-        if(!freq[i]){
-           ds.push_back(nums[i]);
-           freq[i]=1;
-           allpermutation(ds, nums, ans, freq);
-           freq[i]=0;
-           ds.pop_back();
-        }
+     for(ll j=0; j<a.size(); j++){
+
+         if(m.find(j)==m.end()){
+            temp.pb(a[j]);
+            m[j]++;
+            allpermutation(m,a,ans,temp);
+            m[j]--;
+            if(m[j]==0){
+               m.erase(j);
+            }
+            temp.pop_back();
+         }
      }
 }
 int main() { 
