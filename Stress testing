@@ -1,0 +1,24 @@
+     int T,N,a;
+     cin>>T>>N>>a;
+
+     ///(1<=T<=10, 1<=N<=2*10^5, 1<=a[i]<=10^9)
+     /// we can take T,N,a as small as possible so that we can see 
+     /// the test case
+     /// +1 is added due to constraint is given from 1 for each
+     /// T,N,a if someone start from zero you just remove the +1 
+     /// from random function
+
+     /// C++ seeds the value so use srand(time(null)) to generate 
+     /// different test case on different execution 
+
+     srand(time(NULL));
+     int t=rand()%T+1;
+     cout<<t<<endl<<endl;
+     while(t--){
+        int n=rand()%N+1;
+        cout<<n<<endl;
+        for(int i=0; i<n; i++){
+            cout<<(rand()%a+1)<<" ";
+        }
+        cout<<endl;
+     }
