@@ -1,0 +1,21 @@
+         auto f = [&](ll x)->vector<ll>{
+          set<pair<ll,ll>>s;
+          vector<ll>dist(n+1,1e12);
+          dist[x]=0;
+          s.insert({0,x});
+          while(!s.empty()){
+            auto it=*s.begin();
+            ll node=it.ss;
+            ll w=it.ff;
+            s.erase(s.begin());
+            for(auto it: adj[node]){
+               ll nd=it.ff;
+               ll ew=it.ss;
+               if(dist[nd]>(w+ew)){
+                  dist[nd]=(w+ew);
+                  s.insert({dist[nd],nd});
+               }
+             }
+           }
+           return dist;
+         };
