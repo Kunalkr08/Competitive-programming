@@ -1,0 +1,31 @@
+struct Fenwick{
+    
+    //These Two query supported by this fenwick Tree
+    //Point Update and Range Query
+    //Range Update and Point Query
+
+    vector<ll>BIT;
+    Fenwick(ll n){
+       BIT.resize(n+5,0);
+    }
+
+    void update(ll ind, ll val, ll n){
+         while(ind<=n){
+             BIT[ind]+=val;
+             ind+=(ind&(-ind));
+         }
+    }
+
+    ll get_sum(ll ind){
+       ll sum=0;
+       while(ind>0){
+          sum+=BIT[ind];
+          ind-=(ind&(-ind));
+       }
+       return sum;
+    }
+
+    ll query(ll l, ll r){
+       return (get_sum(r)-get_sum(l-1));
+    }
+};
