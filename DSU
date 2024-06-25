@@ -1,0 +1,31 @@
+struct DSU{
+    vector<ll>parent,size;
+        DSU(ll n){
+            parent.resize(n);
+            size.resize(n);
+            for(ll i=0; i<n; i++){
+                parent[i]=i;
+                size[i]=1;
+            }
+        }
+
+        ll find_set(ll node){
+             if(parent[node]==node) return node;
+             return parent[node]=find_set(parent[node]);
+        }
+
+        void union_Bysize(ll a, ll b){
+            a=find_set(a);
+            b=find_set(b);
+            if(a==b) return;
+
+            if(size[a]>=size[b]){
+                size[a]+=size[b];
+                parent[b]=a;
+            }
+            else{
+                size[b]+=size[a];
+                parent[a]=b;
+            }
+        }
+};
