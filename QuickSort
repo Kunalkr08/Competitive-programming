@@ -1,0 +1,23 @@
+int partition(vector<int>&a, int start, int end){
+    int pos=start;
+    for(int i=start; i<=end; i++){
+        if(a[i]<=a[end]){
+            swap(a[i],a[pos]);
+            pos++;
+        }
+    }
+    return pos-1;
+}
+
+void quicksort(vector<int>&a, int start, int end){
+     if(start>=end) return;
+
+     int pivote=partition(a,start,end);
+     //move to left
+     quicksort(a, start, pivote-1);
+     //move to right
+     quicksort(a, pivote+1, end);
+}
+
+//Time complexity in average case is O(NlogN) and space is O(logN)
+//Time complexity in worst case is O(N^2) and space complexity is O(N)
