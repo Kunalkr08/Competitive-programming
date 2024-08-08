@@ -1,68 +1,79 @@
-struct Node {
-   Node *links[26];
-   bool flag = false;
-   //check if the reference trie is present or not
-   bool containKey(char ch){
-      return (links[ch-'a']!=NULL);
-   }
-   //creating reference trie
-   void put(char ch, Node *node){
-      links[ch-'a']=node;
-   }
-   //to get the next node for traversal
-   Node *get(char ch){
-      return links[ch-'a'];
-   }
-   //setting flag to true at the end of the word
-   void setEnd(){
-      flag = true;
-   }
-   //checking if the word is completed or not
-   bool isEnd(){
-      return flag;
-   }
-};
-class Trie{
-    private:
-      Node* root;
-    public:
-      Trie(){
-          // creating new object
-         root = new Node();
-      }
-
-      void insert(string word){
-         //initializing dummy node pointing to root initially
-         Node *node = root;
-         for(int i=0; i<word.size(); i++){
-            if(!node->containKey(word[i])){
-               node->put(word[i], new Node());
-            }
-            //move to reference trie
-            node = node->get(word[i]);
+   struct TrieNode{
+         int count;
+         TrieNode* childNode[26];
+         int wordEnd;
+         TrieNode(){
+             for(int i=0; i<26; i++){
+                 childNode[i]=NULL;
+             }
+             count=0;
+             wordEnd=0;
          }
-         node->setEnd();
-      }
+    };
 
-      bool search(string word){
-         Node *node = root;
-         for(int i=0; i<word.size(); i++){
-            if(!node->containKey(word[i])){
-               return false;
-            }
-            node = node->get(word[i]);
-         }
-         return node->isEnd();
-      }
+    TrieNode* root=new TrieNode();
 
-      bool startsWith(string prefix){
-         Node *node = root;
-         for(int i=0; i<prefix.size(); i++){
-            if(!node->containKey(prefix[i])){
-               return false;
+    void insert(string &s){
+        // Write your code here.
+        TrieNode* currentNode=root;
+
+        for(auto c: s){
+            if(currentNode->childNode[c-'a']==NULL){
+                TrieNode* newNode=new TrieNode();
+                currentNode->childNode[c-'a']=newNode;
             }
-            node = node->get(prefix[i]);
+            
+            currentNode=currentNode->childNode[c-'a'];
+            currentNode->count++;
+        }
+
+        currentNode->wordEnd++;
+    }
+
+    int countWordsEqualTo(string &s){
+        // Write your code here.
+        
+        TrieNode* currentNode=root;
+        for(auto c: s){
+            if(currentNode->childNode[c-'a']==NULL){
+                return 0;
+            }
+            currentNode=currentNode->childNode[c-'a'];
+        }
+        
+
+        int ans=0;
+        if(currentNode->wordEnd){
+            ans=currentNode->count;
+        }
+        return ans;
+    }
+
+    int countWordsStartingWith(string &s){
+        // Write your code here.
+        TrieNode* currentNode=root;
+        for(auto c: s){
+            if(currentNode->childNode[c-'a']==NULL){
+                return 0;
+            }
+            currentNode=currentNode->childNode[c-'a'];
+        }
+      
+        return currentNode->count;
+    }
+
+    void erase(string &s){
+
+         TrieNode* currentNode=root;
+         for(auto c: s){
+             if(currentNode->childNode[c-'a']){
+                 currentNode=currentNode->childNode[c-'a'];
+                 currentNode->count--;
+             }
+             else{
+                 return;
+             }
          }
-         return true;
-      }
-};
+
+         currentNode->wordEnd--;
+    }
