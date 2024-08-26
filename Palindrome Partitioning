@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll=long long;
+bool check(string s){
+     for(ll i=0; i<(int)s.size()/2; i++){
+         if(s[i]!=s[s.size()-i-1]){
+             return 0;
+         }
+     }
+     return 1;
+}
+void f(ll i, ll n, string s, vector<string>&ds, vector<vector<string>>&ans){
+     if(i==n){
+         for(auto it: ds) cout<<it<<" ";
+         cout<<endl;
+         return;
+     }
+
+     for(ll j=i; j<n; j++){
+         if(check(s.substr(i, j-i+1))){
+             ds.push_back((s.substr(i,j-i+1)));
+             f(j+1, n, s, ds, ans);
+             ds.pop_back();
+         }
+     }
+}
+void solve(){
+     ll n;
+     cin>>n;
+     string s;
+     cin>>s;
+     vector<vector<string>>ans;
+     vector<string>ds;
+     f(0, n, s, ds, ans);
+}
+int main(){ 
+     int t;
+     cin>>t;
+     while(t--){
+       solve();
+     }
+     return 0;
+}
