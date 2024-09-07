@@ -1,57 +1,56 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define ll long long
-#define pb push_back
+#define mod 1000000007
+
 class segtree{
-   public: 
+   public:
+
       vector<ll>seg;
       segtree(ll n){
-         seg.resize(4*n);
+          seg.resize(4*n);
       }
 
-      ll combine(ll p1, ll p2){
-         return min(p1,p2);
-      }
-
-      void build(vector<ll>&a, ll node, ll start, ll end){
-           if(start==end){
-              seg[node]=a[start];
-              return;
+      void build(ll l, ll h, ll node, vector<ll>&a){
+           if(l==h){
+               seg[node]=a[l];
+               return;
            }
 
-           ll mid=(start+end)/2;
-           build(a, 2*node+1, start, mid);
-           build(a, 2*node+2, mid+1, end);
-
-           seg[node]=combine(seg[2*node+1],seg[2*node+2]);
+           ll mid=(l+h)/2;
+           build(l, mid, 2*node+1, a);
+           build(mid+1, h, 2*node+2, a);
+           seg[node]=min(seg[2*node+1],seg[2*node+2]);
       }
 
-      void update(vector<ll>&a, ll node, ll start, ll end, ll id, ll val){
-           if(start==end){
-              a[id]=val;
-              seg[node]=val;
-              return;
+      void update(ll l, ll h, ll node, ll id, ll val, vector<ll>&a){
+           if(l==h){
+               seg[node]=val;
+               a[id]=val;
+               return;
            }
-           ll mid=(start+end)/2;
-           if(id>=start && id<=mid){
-              update(a, 2*node+1, start, mid, id, val);
+
+           ll mid=(l+h)/2;
+           if(l<=id && id<=mid){
+               update(l, mid, 2*node+1, id, val, a);
            }
            else{
-              update(a, 2*node+2, mid+1, end, id, val);
+               update(mid+1, h, 2*node+2, id, val, a);
            }
-
-           seg[node]=combine(seg[2*node+1],seg[2*node+2]);
+           seg[node]=min(seg[2*node+1],seg[2*node+2]);
       }
 
-      ll query(ll node, ll start, ll end, ll left, ll right){
-           if(right<start || left>end) return 1e12;
-           if(left<=start && end<=right){
-               return seg[node];
-           }
-           ll mid=(start+end)/2;
-           ll q1=query(2*node+1, start, mid, left, right);
-           ll q2=query(2*node+2, mid+1, end, left, right);
-           return combine(q1,q2);
+      ll query(ll l, ll h, ll node, ll from, ll to){
+         if(from>h || to<l){
+             return 1e12;
+         }
+         else if(from<=l && h<=to){
+             return seg[node];
+         }
+         else{
+             ll mid=(l+h)/2;
+             return min(query(l, mid, 2*node+1, from, to), query(mid+1, h, 2*node+2, from, to));
+         }
       }
 };
 int main(){ 
@@ -59,25 +58,24 @@ int main(){
      cin>>n>>q;
      vector<ll>a(n);
      for(ll i=0; i<n; i++){
-        cin>>a[i];
+         cin>>a[i];
      }
-     segtree s(n+1);
-     s.build(a, 0, 0, n-1);
+     
+     segtree s(n+5);
+     s.build(0, n-1, 0, a);
+
      while(q--){
-         ll p;
-         cin>>p;
-         if(p==1){
-            ll k,u;
-            cin>>k>>u;
-            k--;
-            s.update(a, 0, 0, n-1, k, u);
+         ll type, x, y;
+         cin>>type>>x>>y;
+
+         if(type==2){
+             x--,y--;
+             ll p=s.query(0, n-1, 0, x, y);
+             cout<<p<<endl;
          }
          else{
-            ll x,y;
-            cin>>x>>y;
-            x--,y--;
-            ll q=s.query(0, 0, n-1, x, y);
-            cout<<q<<endl;
+             x--;
+             s.update(0, n-1, 0, x, y, a);
          }
      }
      return 0;
