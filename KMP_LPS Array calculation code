@@ -1,0 +1,28 @@
+// By the way below code is for longest prefix and suffix calculation
+
+class Solution {
+    #define ll long long
+  public:
+    int lps(string s) {
+         ll n=s.size();
+         
+         vector<ll>v(n);
+         ll pre=0,suf=1;
+         while(suf<n){
+             if(s[pre]==s[suf]){
+                 v[suf]=pre+1;
+                 pre++,suf++;
+             }
+             else{
+                 if(pre==0){
+                     v[suf]=0;
+                     suf++;
+                 }
+                 else{
+                     pre=v[pre-1];
+                 }
+             }
+         }
+         return v[n-1];
+    }
+};
