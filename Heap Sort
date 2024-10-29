@@ -1,93 +1,54 @@
 #include<bits/stdc++.h>
-#include<ext/pb_ds/assoc_container.hpp>
-#include<ext/pb_ds/tree_policy.hpp>
 using namespace std;
-using namespace __gnu_pbds;
-typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update>ords; // find_by_order, order_of_key
 #define ll long long
-#define mod 1000000007
-const int N = 2e5+5;
-#define inf 1e9
-#define ff first
-#define ss second
-#define fr(i,n) for(ll i = 0; i<n; i++)
-#define pb push_back
-#define PI 3.141592653589793238462
-#define set_bits __builtin_popcount
-#define all(s) sort(s.begin(), s.end())
-#define Val(s) (s.begin(), s.end())
-#define rev(s) reverse(s.begin(),s.end())
-#define runf ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-//ll inv(ll i) {if (i == 1) return 1; return (mod - ((mod / i) * inv(mod % i)) % mod) % mod;}
-ll mod_mul(ll a, ll b) {a = a % mod; b = b % mod; return (((a * b) % mod) + mod) % mod;}
-ll mod_add(ll a, ll b) {a = a % mod; b = b % mod; return (((a + b) % mod) + mod) % mod;}
-ll mod_sub(ll a, ll b) {a = a % mod; b = b % mod; return (((a - b + mod) % mod) + mod) % mod;}
-/// if in some question it is mentioned that to "find min" or 
-/// or "find maximum" or find "number of ways" then there is chance 
-/// that problem is solved using dp
-void heapify(vector<ll>&a, ll index, ll n){
-     // ll largest=index;
-     // ll left=2*index+1;
-     // ll right=2*index+2;
-     // if(left<n && a[largest]<a[left]){
-     //     largest=left;
-     // }
-     // if(right<n && a[largest]<a[right]){
-     //     largest=right;
-     // }
 
-     // if(largest!=index){
-     //     swap(a[largest],a[index]);
-     //     heapify(a, largest, n);
-     // }
+void heapify(vector<ll>&a, ll n, ll i){
+     ll largest=i;
+     ll left=2*i+1;
+     ll right=2*i+2;
 
-     while(1){
-        ll largest=index;
-        ll left=2*index+1;
-        ll right=2*index+2;
-        
-        if(left<n && a[largest]<a[left]){
-            largest=left;
-        }
-        if(right<n && a[largest]<a[right]){
-            largest=right;
-        }
-        if(largest==index){
-            break;
-        }
-        swap(a[largest],a[index]);
-        index=largest;
+     if(left<n && a[largest]<a[left]){
+         largest=left;
      }
-}
-void stepdown(vector<ll>&a, ll n){
-     for(ll i=n/2-1; i>=0; i--){
-         heapify(a, i, n);
+     if(right<n && a[largest]<a[right]){
+         largest=right;
+     }
+
+     if(largest!=i){
+         swap(a[i],a[largest]);
+         heapify(a, n, largest);
      }
 }
 
-void sortarray(vector<ll>&a, ll n){
+void heap_sort(vector<ll>&a, ll n){
+     // build heap
+     for(ll i=(n/2-1); i>=0; i--){
+         heapify(a, n, i);
+     }
+
+     // one by one extract element from heap
      for(ll i=n-1; i>=0; i--){
-          stepdown(a, i+1);
-          swap(a[0],a[i]);
+         // move current element to end
+         swap(a[0],a[i]);
+         // call heapfiy function on reduce heap
+         heapify(a, i, 0);
      }
 }
-int main(){ 
-     runf // must be disabled in interactive question
-     ll n;
-     cin>>n;
-     vector<ll>a(n);
-     for(ll i=0; i<n; i++){
-         cin>>a[i];
-     }
-     sortarray(a, n);
-     for(ll i=0; i<n; i++){
-         cout<<a[i]<<" ";
-     }
-     return 0;
+int main(){
+    ll n;
+    cin>>n;
+    vector<ll>a(n);
+    for(ll i=0; i<n; i++){
+       cin>>a[i];
+    }
+
+    heap_sort(a, n);
+    for(auto it: a){
+        cout<<it<<" ";
+    }
+    return 0;
 }
 
 
-
-/// About this algorithm :--- Time Complexity is O(nlogn) and space is
-/// O(1) when we use iterative approach and when we use recursive approach then its time complexity 
-/// space complexity become O(logn)
+// Time complexity is O(Nlog(N));
+// Space Complexity is O(1);
