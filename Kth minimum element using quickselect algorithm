@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib> // For rand()
+
+using namespace std;
+
+// Partition function
+int partition(vector<int>& arr, int left, int right) {
+    int pivot = arr[right]; // Choose the last element as the pivot
+    int i = left;
+
+    for (int j = left; j < right; j++) {
+        if (arr[j] < pivot) {
+            swap(arr[i], arr[j]);
+            i++;
+        }
+    }
+    swap(arr[i], arr[right]); // Place the pivot in its correct position
+    return i;
+}
+
+// Quickselect function
+int quickselect(vector<int>& arr, int left, int right, int k) {
+    if (left <= right) {
+        // Partition the array
+        int pivotIndex = partition(arr, left, right);
+
+        // If the pivot is the k-th smallest element
+        if (pivotIndex == k - 1) {
+            return arr[pivotIndex];
+        }
+        // If the k-th smallest is in the left partition
+        else if (pivotIndex > k - 1) {
+            return quickselect(arr, left, pivotIndex - 1, k);
+        }
+        // If the k-th smallest is in the right partition
+        else {
+            return quickselect(arr, pivotIndex + 1, right, k);
+        }
+    }
+    return -1; // Shouldn't reach here
+}
+
+int main() {
+    vector<int> arr = {3, 2, 1, 5, 4};
+    int k = 3; // Find the 3rd smallest element
+
+    int result = quickselect(arr, 0, arr.size() - 1, k);
+
+    cout << "The " << k << "-th smallest element is: " << result << endl;
+    return 0;
+}
