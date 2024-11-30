@@ -1,0 +1,49 @@
+class Solution {
+    void dfs(int node, unordered_map<int, vector<int>>&adj, vector<int>&path){
+         while(adj[node].size()>0){
+              int nextnode=adj[node].back();
+              adj[node].pop_back();
+              dfs(nextnode,adj,path);
+         }
+         path.push_back(node);
+    }
+public:
+    vector<vector<int>> validArrangement(vector<vector<int>>&a) {
+        unordered_map<int, vector<int>>adj;
+        unordered_map<int,int>ind,outd;
+
+        for(auto it: a){
+            int start=it[0], end=it[1];
+            adj[start].push_back(end);
+            outd[start]++;
+            ind[end]++; 
+        }
+
+        int startnode=-1;
+        for(auto it: a){
+            int start=it[0], end=it[1];
+            if(outd[start]==ind[start]+1){
+                startnode=start;
+                break;
+            }
+            if(outd[end]==ind[end]+1){
+                startnode=end;
+                break;
+            }
+        }
+        
+        if(startnode==-1){
+            startnode=a[0][0];
+        }
+
+        vector<int>path;
+        dfs(startnode,adj,path);
+        reverse(path.begin(),path.end());
+        vector<vector<int>>ans;
+        for(int i=1; i<path.size(); i++){
+             ans.push_back({path[i-1],path[i]});
+        }
+        return ans;
+    }
+};
+
