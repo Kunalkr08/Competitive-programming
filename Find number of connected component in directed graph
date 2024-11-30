@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+
+class DSU{
+   public:
+       vector<ll>parent,size;
+       ll n;
+       DSU(ll n){
+           parent.resize(n);
+           size.resize(n);
+           for(ll i=0; i<n; i++){
+               parent[i]=i;
+               size[i]=1;
+           }
+       }
+
+       ll find_par(ll node){
+          if(node==parent[node]) return node;
+          return parent[node]=find_par(parent[node]);
+       }
+
+       void unionfind(ll a, ll b){
+           a=find_par(a);
+           b=find_par(b);
+           if(a==b) return;
+           if(size[a]>size[b]){
+              parent[b]=a;
+              size[a]+=size[b];
+           }
+           else{
+              parent[a]=b;
+              size[b]+=size[a];
+           }
+       }
+
+};
+int main() {
+    ll n,m;
+    cin>>n>>m;
+    DSU d(n+5);
+    for(ll i=0; i<m; i++){
+        ll x,y;
+        cin>>x>>y;
+        ll a=d.find_par(x);
+        ll b=d.find_par(y);
+        if(a==b){
+            continue;
+        }
+        else{
+            d.unionfind(x,y);
+        }
+    }
+
+    vector<ll>ans=d.parent;
+    set<ll>st;
+    for(ll i=1; i<=n; i++){
+        st.insert(ans[i]);
+    }
+    cout<<st.size()<<endl;
+    return 0;
+}
