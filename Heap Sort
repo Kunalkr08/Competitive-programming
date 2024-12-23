@@ -1,3 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+
+/*
+   Program to implement heap sort
+*/
+void heapify(vector<ll>&a, ll n, ll id){
+	 ll index=id;
+	 ll left=2*index+1;
+	 ll right=2*index+2;
+	 if(left<n && a[left]>a[id]){
+	 	id=left;
+	 }
+	 if(right<n && a[right]>a[id]){
+	 	id=right;
+	 }
+	 if(index!=id){
+	 	 swap(a[index],a[id]);
+	 	 heapify(a, n, id);
+	 }
+}
+
+void heap_sort(vector<ll>&a, ll n){
+	 //build max heap
+	 for(ll i=(n/2)-1; i>=0; i--){
+         heapify(a, n, i);
+	 }
+     
+     // sort the array by calling heapify function
+	 for(ll i=n-1; i>=0; i--){
+	 	swap(a[0],a[i]);
+	 	heapify(a, i, 0);
+	 }
+}
+int main() {
+    ll n;
+    cin>>n;
+    vector<ll>a(n);
+    for(auto &it : a) cin>>it;
+    heap_sort(a,n);
+    for(auto it: a) cout<<it<<" ";
+    return 0;
+}
+
+// Time Complexity is O(Nlog(N))
+// Space Complexxity is O(log2(N)) using recursive heapify 
+// but we can reduce it to O(1) by using while loop
+
+
+This implementation is done by me
+...................................................................................................................................................................
+
+
+
+
 #include<bits/stdc++.h>
 using namespace std;
 #define ll long long
